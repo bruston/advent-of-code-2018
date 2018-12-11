@@ -47,6 +47,7 @@ func main() {
 		}
 		if !conflict {
 			fmt.Println(id)
+			break
 		}
 	}
 }
