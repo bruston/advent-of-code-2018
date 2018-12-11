@@ -19,7 +19,6 @@ func main() {
 		s := bufio.NewScanner(bytes.NewReader(b))
 		for s.Scan() {
 			n := 0
-			fmt.Sscanf(s.Text(), "%d", &n)
 			if _, err := fmt.Sscanf(s.Text(), "%d", &n); err != nil {
 				log.Fatalf("error while scanning input: %s", err)
 			}
