@@ -46,49 +46,33 @@ func main() {
 	yMin := points[0].y
 	yMax := points[len(points)-1].y
 
-	grid := make([][]int, xMax-xMin)
-	for i := range grid {
-		grid[i] = make([]int, yMax-yMin)
-	}
-
-	for x := range grid {
-		for y := range grid[x] {
-			p := point{x: x + xMin, y: y + yMin}
+	count := make(map[int]int)
+	infinite := make(map[int]struct{})
+	for x := xMin; x <= xMax; x++ {
+		for y := yMin; y <= yMax; y++ {
+			p := point{x: x, y: y}
 			distances := []distance{}
 			for i, v := range points {
 				d := abs(p.x-v.x) + abs(p.y-v.y)
 				distances = append(distances, distance{pointIndex: i, n: d})
 			}
-
 			sort.Slice(distances, func(i, j int) bool { return distances[i].n < distances[j].n })
 			if distances[0].n == distances[1].n {
-				grid[x][y] = -1
 				continue
 			}
-			grid[x][y] = distances[0].pointIndex
-		}
-	}
-
-	count := make(map[int]int)
-	infinite := make(map[int]struct{})
-	for x := range grid {
-		for y := range grid[x] {
-			if grid[x][y] > 0 {
-				count[grid[x][y]]++
+			if p.x == xMin || p.x == xMax || p.y == yMin || p.y == yMax {
+				infinite[distances[0].pointIndex] = struct{}{}
 			}
-			if x+xMin == xMin || x+xMin == xMax || y+yMin == yMin || y+yMin == yMax {
-				infinite[grid[x][y]] = struct{}{}
-			}
+			count[distances[0].pointIndex]++
 		}
 	}
 
 	max := 0
 	for k, v := range count {
 		if v > max {
-			if _, ok := infinite[k]; ok {
-				continue
+			if _, ok := infinite[k]; !ok {
+				max = v
 			}
-			max = v
 		}
 	}
 	fmt.Println(max)
