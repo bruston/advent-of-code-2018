@@ -93,9 +93,7 @@ func main() {
 			}
 		}
 	}
-	var mostNapped int
-	var bestChance int
-	var sleepyGuard int
+	var mostNapped, bestChance, sleepyGuard int
 	for k, v := range naps {
 		for i, v := range v {
 			if v > mostNapped {
