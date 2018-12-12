@@ -10,8 +10,6 @@ import (
 
 type point struct{ x, y int }
 
-type distance struct{ pointIndex, n int }
-
 func abs(n int) int {
 	if n < 0 {
 		return -n
