@@ -19,7 +19,7 @@ func main() {
 		s := bufio.NewScanner(bytes.NewReader(b))
 		for s.Scan() {
 			n := 0
-			if _, err := fmt.Sscanf(s.Text(), "%d", &n); err != nil {
+			if _, err := fmt.Sscan(s.Text(), &n); err != nil {
 				log.Fatalf("error while scanning input: %s", err)
 			}
 			sum += n
