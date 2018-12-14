@@ -61,5 +61,8 @@ func main() {
 	}
 	defer f.Close()
 	root, err := parseNode(f)
+	if err != nil {
+		log.Fatalf("error while parsing nodes: %v", err)
+	}
 	fmt.Println(root.value())
 }
