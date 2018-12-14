@@ -8,29 +8,30 @@ import (
 )
 
 type node struct {
-	children []*node
+	children []node
 	meta     []int
 }
 
-func parseNode(r io.Reader) (*node, error) {
+func parseNode(r io.Reader) (node, error) {
 	var children, metas int
 	if _, err := fmt.Fscan(r, &children, &metas); err != nil {
-		return nil, err
+		return node{}, fmt.Errorf("error parsing node header: %v", err)
 	}
-	parent := &node{}
-	parent.children = make([]*node, 0, children)
-	parent.meta = make([]int, 0, metas)
+	parent := node{
+		children: make([]node, 0, children),
+		meta:     make([]int, 0, metas),
+	}
 	for i := 0; i < children; i++ {
 		child, err := parseNode(r)
 		if err != nil {
-			return nil, err
+			return node{}, fmt.Errorf("error parsing child: %v", err)
 		}
 		parent.children = append(parent.children, child)
 	}
 	for i := 0; i < metas; i++ {
 		n := 0
 		if _, err := fmt.Fscan(r, &n); err != nil {
-			return nil, err
+			return node{}, fmt.Errorf("error parsing metadata: %v", err)
 		}
 		parent.meta = append(parent.meta, n)
 	}
